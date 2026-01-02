@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Math‑Fear AI Chat Demo</title>
+    <style>
+        /* ==== Calm, confidence‑boosting palette (soft teal‑green) ==== */
+        :root{
+            --primary:#00897B;          /* soothing teal */
+            --primary-dark:#00695C;     /* darker for hover */
+            --bg-instructions:#e0f2f1; /* very light teal background */
+            --bg-prompt:#f1fbfa;        /* faint teal for prompt boxes */
+            --bg-disclaimer:#fafafa;
+        }
+
+        /* ==== General layout ==== */
+        body{
+            font-family:Arial,Helvetica,sans-serif;
+            max-width:800px;
+            margin:2rem auto;
+            line-height:1.6;
+            color:#333;
+            padding:0 1rem;
+        }
+        h1{ text-align:center; margin-bottom:.5rem; }
+
+        /* ==== Instruction box ==== */
+        .instructions{
+            background:var(--bg-instructions);
+            border-left:6px solid var(--primary);
+            padding:1rem;
+            margin:1.5rem 0;
+        }
+        .instructions ol{margin-left:1.2rem;}
+
+        /* ==== Prompt boxes ==== */
+        .prompt{
+            background:var(--bg-prompt);
+            border-left:6px solid var(--primary);
+            padding:.9rem;
+            margin:.9rem 0;
+            position:relative;
+            white-space:pre-wrap;
+            transition:background .2s;
+        }
+        .prompt:hover{background:#d0ecec;}
+        .prompt .copy-btn{
+            position:absolute;
+            top:6px;
+            right:6px;
+            background:var(--primary);
+            color:#fff;
+            border:none;
+            border-radius:3px;
+            padding:2px 6px;
+            font-size:.85rem;
+            cursor:pointer;
+        }
+        .prompt .copy-btn:hover{background:var(--primary-dark);}
+
+        /* ==== Chat button ==== */
+        .chat-btn{
+            display:block;
+            width:100%;
+            max-width:300px;
+            margin:1.5rem auto;
+            padding:.8rem 1.2rem;
+            background:var(--primary);
+            color:#fff;
+            border:none;
+            border-radius:6px;
+            font-size:1.1rem;
+            text-align:center;
+            text-decoration:none;
+            cursor:pointer;
+        }
+        .chat-btn:hover{background:var(--primary-dark);}
+
+        /* ==== Footer & disclaimer ==== */
+        footer{
+            margin-top:2rem;
+            font-size:.85rem;
+            text-align:center;
+            color:#777;
+            line-height:1.4;
+        }
+        .disclaimer{
+            font-size:.78rem;
+            color:#555;
+            background:var(--bg-disclaimer);
+            border-left:4px solid #ff9900;
+            padding:.6rem;
+            margin:1rem 0;
+            display:inline-block;
+            text-align:left;
+            max-width:100%;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Math‑Fear AI Chat</h1>
+
+<div class="instructions">
+    <strong>How to use:</strong>
+    <ol>
+        <li>Read the short text below that matches the kind of support you need.</li>
+        <li>Click the <strong>Copy</strong> button to copy that text.</li>
+        <li>Click the <strong>Free Chat</strong> button – it opens OpenAI’s free ChatGPT web UI.</li>
+        <li>Paste the copied text into the chat window and start a supportive conversation.</li>
+    </ol>
+</div>
+
+<!-- Prompt 1 – Gentle reassurance & mindset reset -->
+<div class="prompt" id="p1">
+    <button class="copy-btn" onclick="copyPrompt('p1')">Copy</button>
+You are a calm, compassionate math‑coach. I feel a wave of anxiety whenever I think about doing math problems.
+
+1. Acknowledge the feeling (“It’s completely normal to feel nervous about math”).  
+2. Guide me through a brief grounding exercise – 4‑7‑8 breathing or a quick body‑scan – to lower immediate anxiety.  
+3. Reframe the mindset: suggest viewing math as a puzzle or a series of small steps rather than a single daunting test.  
+4. Offer a simple “starter‑question” (e.g., “What is 2 + 2?”) and walk me through solving it slowly, explaining each thought aloud.  
+5. End with a supportive mantra (“I can handle one step at a time, and each step builds confidence”).  
+
+Keep the tone warm, patient, and encouraging.
+</div>
+
+<!-- Prompt 2 – Building foundational confidence -->
+<div class="prompt" id="p2">
+    <button class="copy-btn" onclick="copyPrompt('p2')">Copy</button>
+You are a nurturing math‑mentor. I’m afraid I’m missing basic foundations, which makes every new topic feel impossible.
+
+1. Ask me to name one recent math concept that felt confusing.  
+2. Suggest a “foundation‑check” routine: pick the three most basic skills that underlie that concept (e.g., addition, subtraction, place value).  
+3. Provide a quick, low‑pressure practice activity for each skill (e.g., flashcards, mental math for 1‑minute, or a real‑world example like counting change).  
+4. Encourage me to record a tiny success (“I correctly added 27 + 15”) and celebrate it.  
+5. Propose a short daily habit – 5 minutes of a chosen foundational drill – and give a simple tracking template I can copy.  
+
+Tone should be encouraging, emphasizing that mastery grows from tiny, consistent wins.
+</div>
+
+<!-- Prompt 3 – Reducing perfectionism & fear of mistakes -->
+<div class="prompt" id="p3">
+    <button class="copy-btn" onclick="copyPrompt('p3')">Copy</button>
+You are an empathetic math‑support guide. I’m terrified of making mistakes, so I often avoid working on problems altogether.
+
+1. Validate the fear (“It’s understandable to want to avoid errors, but mistakes are how learning happens”).  
+2. Introduce a “mistake‑reframe” exercise: pick a recent error, describe what happened, then list two things the mistake taught me.  
+3. Suggest a low‑stakes “error‑only” practice session: solve a problem, deliberately write down every mistake, and turn each into a mini‑lesson.  
+4. Offer a short, calming visualization – imagine a safe space where errors appear as harmless bubbles that float away.  
+5. Close with a gentle affirmation (“Every mistake is a stepping stone toward confidence”).  
+
+Maintain a soothing, non‑judgmental voice throughout.
+</div>
+
+<a href="https://chat.openai.com/" target="_blank" class="chat-btn">Free Chat (OpenAI)</a>
+
+<script>
+/**
+ * Copies only the prompt text (excludes the “Copy” button label).
+ * Shows a temporary “Copied!” label on the button for feedback.
+ */
+async function copyPrompt(id){
+    const container=document.getElementById(id);
+    const btn=container.querySelector('.copy-btn');
+
+    // Gather everything after the button
+    let txt='';
+    for(let node=btn.nextSibling; node; node=node.nextSibling){
+        if(node.nodeType===Node.TEXT_NODE) txt+=node.textContent;
+        else if(node.nodeType===Node.ELEMENT_NODE) txt+=node.innerText;
+    }
+    txt=txt.trim();
+
+    try{
+        await navigator.clipboard.writeText(txt);
+        flash(btn,'Copied!');
+    }catch(e){
+        fallbackCopy(txt,btn);
+    }
+}
+function flash(button,msg){
+    const original=button.textContent;
+    button.textContent=msg;
+    setTimeout(()=>{button.textContent=original;},1500);
+}
+function fallbackCopy(txt,btn){
+    const ta=document.createElement('textarea');
+    ta.value=txt;
+    ta.style.position='fixed';
+    ta.style.left='-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+        document.execCommand('copy');
+        flash(btn,'Copied!');
+    }catch(_){
+        alert('Copy failed – please select the text manually.');
+    }
+    document.body.removeChild(ta);
+}
+</script>
+
+<footer>
+    © 2026 Fluxpuls – Powered by OpenAI.
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> The AI replies are generated for experimental use only and may contain
+        inaccuracies, outdated information, or unintended bias. Do not rely on them for legal, medical,
+        financial, or safety‑critical decisions. Always verify important information with authoritative sources.
+    </div>
+    This page is for educational/demo purposes only.
+</footer>
+</body>
+</html>
